@@ -17,12 +17,12 @@ The console will show any errors in your sketch.
 
 ## Assets
 
-| # | File | Source |
-|---|------|--------|
-| 1 | `assets/images/mario sprites.png` | Cyloopzaya, Super Mario 3 inspired 32x32 sprite sheet — DeviantArt [1] |
-| 2 | `assets/images/goomba sprites.png` | Goomba Sprite Sheet — Pixilart [2] |
-| 3 | `assets/images/super mario star.png` | Sky Backgrounds from Paper Mario — Supper Mario Broth [3] |
-| 4 | `assets/images/super mario background.jpg` | Super Mario Background — WallpaperCave [4] |
+| File | Source |
+|------|--------|
+| `assets/images/mario sprites.png` | Cyloopzaya, Super Mario 3 inspired 32x32 sprite sheet — DeviantArt [1] |
+| `assets/images/goomba sprites.png` | Goomba Sprite Sheet — Pixilart [2] |
+| `assets/images/super mario star.png` | Sky Backgrounds from Paper Mario — Supper Mario Broth [3] |
+| `assets/images/super mario background.jpg` | Super Mario Background — WallpaperCave [4] |
 
 ## References
 
