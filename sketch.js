@@ -18,12 +18,12 @@
 // drawCharacter). Up/down reuse the same right-facing frames.
 // ------------------------------------------------------------
 const SPRITE = {
-  frameWidth:  256,
+  frameWidth: 256,
   frameHeight: 256,
-  numFrames:   4,   // first four poses of the top row
-  row:         0,   // top row of the sheet = walk cycle
-  animSpeed:   8,
-  scale:       0.15, // 256 * 0.15 ≈ 38px, comfortably inside a tile
+  numFrames: 4, // first four poses of the top row
+  row: 0, // top row of the sheet = walk cycle
+  animSpeed: 8,
+  scale: 0.15, // 256 * 0.15 ≈ 38px, comfortably inside a tile
   // Mario's art is bottom-aligned in each cell (padding is all at the
   // top), so nudge the drawing up a few px to centre his body on the
   // collision box — this keeps his feet from sinking into walls.
@@ -37,11 +37,11 @@ const SPRITE = {
 // Goomba "shuffles" while waiting to be collected.
 // ------------------------------------------------------------
 const GOOMBA = {
-  frameWidth:  161, // 483 / 3 frames
+  frameWidth: 161, // 483 / 3 frames
   frameHeight: 119, // 238 / 2 rows  (top row only)
-  numFrames:   3,
-  animSpeed:   10,
-  scale:       0.35, // ~56x42px, fits inside a 50px tile
+  numFrames: 3,
+  animSpeed: 10,
+  scale: 0.35, // ~56x42px, fits inside a 50px tile
 };
 
 // ------------------------------------------------------------
@@ -74,14 +74,14 @@ const MAZE = [
 
 // Pixel dimensions of the maze grid, plus a footer strip below the
 // maze that holds the on-screen instructions.
-const MAZE_W   = TILE_SIZE * MAZE[0].length;
-const MAZE_H   = TILE_SIZE * MAZE.length;
+const MAZE_W = TILE_SIZE * MAZE[0].length;
+const MAZE_H = TILE_SIZE * MAZE.length;
 const FOOTER_H = 40;
 
 // Brick palette for the wall tiles
 const BRICK = {
-  mortar: [38,  20, 12], // dark grout between bricks
-  face:   [184, 92, 54], // classic Mario brick orange-brown
+  mortar: [38, 20, 12], // dark grout between bricks
+  face: [184, 92, 54], // classic Mario brick orange-brown
 };
 
 // ------------------------------------------------------------
@@ -97,9 +97,9 @@ let player = {
 
   // Animation state
   currentFrame: 0,
-  frameTimer:   0,
-  direction:    "down",
-  isMoving:     false,
+  frameTimer: 0,
+  direction: "down",
+  isMoving: false,
 
   // Collision box half-dimensions
   // Sized to wrap Mario's body (including his lower half) so he can't
@@ -134,8 +134,8 @@ let starBackground;
 // ============================================================
 function preload() {
   characterSheet = loadImage("assets/images/mario sprites.png");
-  goombaSheet    = loadImage("assets/images/goomba sprites.png");
-  winBackground  = loadImage("assets/images/super mario background.jpg");
+  goombaSheet = loadImage("assets/images/goomba sprites.png");
+  winBackground = loadImage("assets/images/super mario background.jpg");
   starBackground = loadImage("assets/images/super mario star.png");
 }
 
@@ -166,11 +166,11 @@ function setup() {
         // Create a coin object for each coin tile
         // Random start frame so coins don't all spin in sync
         coins.push({
-          x:          col * TILE_SIZE + TILE_SIZE / 2,
-          y:          row * TILE_SIZE + TILE_SIZE / 2,
-          frame:      floor(random(GOOMBA.numFrames)),
+          x: col * TILE_SIZE + TILE_SIZE / 2,
+          y: row * TILE_SIZE + TILE_SIZE / 2,
+          frame: floor(random(GOOMBA.numFrames)),
           frameTimer: 0,
-          collected:  false,
+          collected: false,
         });
       }
     }
@@ -261,13 +261,13 @@ function drawBrickTile(x, y, s) {
   drawingContext.clip();
 
   fill(BRICK.face[0], BRICK.face[1], BRICK.face[2]);
-  const bw  = s / 2; // brick is half a tile wide
-  const bh  = s / 3; // three brick rows per tile
-  const gap = 3;     // mortar thickness
+  const bw = s / 2; // brick is half a tile wide
+  const bh = s / 3; // three brick rows per tile
+  const gap = 3; // mortar thickness
 
   for (let r = 0; r < 3; r++) {
-    let by  = y + r * bh;
-    let off = (r % 2 === 0) ? 0 : -bw / 2; // stagger alternate rows
+    let by = y + r * bh;
+    let off = r % 2 === 0 ? 0 : -bw / 2; // stagger alternate rows
     for (let bx = x + off; bx < x + s; bx += bw) {
       rect(bx + gap / 2, by + gap / 2, bw - gap, bh - gap, 1);
     }
@@ -286,18 +286,18 @@ function drawBrickTile(x, y, s) {
 // ------------------------------------------------------------
 function drawPipe(x, y, s, isOpen) {
   // Palette — bright greens when open, muted greens when locked
-  const base  = isOpen ? color(0, 168, 64)   : color(70, 96, 80);
+  const base = isOpen ? color(0, 168, 64) : color(70, 96, 80);
   const light = isOpen ? color(120, 224, 120) : color(120, 148, 128);
-  const dark  = isOpen ? color(0, 104, 40)    : color(44, 62, 52);
-  const edge  = isOpen ? color(0, 56, 22)     : color(26, 38, 30);
+  const dark = isOpen ? color(0, 104, 40) : color(44, 62, 52);
+  const edge = isOpen ? color(0, 56, 22) : color(26, 38, 30);
 
   rectMode(CORNER);
 
   // Geometry
-  const rimH  = s * 0.30;             // height of the top lip
-  const rimX  = x + 2;                // lip is inset slightly from the tile
-  const rimW  = s - 4;
-  const bodyW = s * 0.70;             // body is narrower than the lip
+  const rimH = s * 0.3; // height of the top lip
+  const rimX = x + 2; // lip is inset slightly from the tile
+  const rimW = s - 4;
+  const bodyW = s * 0.7; // body is narrower than the lip
   const bodyX = x + (s - bodyW) / 2;
   const bodyY = y + rimH;
   const bodyH = s - rimH;
@@ -308,8 +308,8 @@ function drawPipe(x, y, s, isOpen) {
   rect(bodyX, bodyY, bodyW, bodyH);
   fill(light); // highlight band (left)
   rect(bodyX + bodyW * 0.12, bodyY, bodyW * 0.16, bodyH);
-  fill(dark);  // shadow band (right)
-  rect(bodyX + bodyW * 0.70, bodyY, bodyW * 0.18, bodyH);
+  fill(dark); // shadow band (right)
+  rect(bodyX + bodyW * 0.7, bodyY, bodyW * 0.18, bodyH);
   stroke(edge);
   strokeWeight(2);
   noFill();
@@ -320,9 +320,9 @@ function drawPipe(x, y, s, isOpen) {
   fill(base);
   rect(rimX, y, rimW, rimH, 3);
   fill(light); // highlight band (left)
-  rect(rimX + rimW * 0.10, y + rimH * 0.20, rimW * 0.16, rimH * 0.62);
-  fill(dark);  // shadow band (right)
-  rect(rimX + rimW * 0.74, y + rimH * 0.20, rimW * 0.16, rimH * 0.62);
+  rect(rimX + rimW * 0.1, y + rimH * 0.2, rimW * 0.16, rimH * 0.62);
+  fill(dark); // shadow band (right)
+  rect(rimX + rimW * 0.74, y + rimH * 0.2, rimW * 0.16, rimH * 0.62);
   stroke(edge);
   strokeWeight(2);
   noFill();
@@ -331,7 +331,7 @@ function drawPipe(x, y, s, isOpen) {
   // --- Opening (dark hollow mouth inside the lip) ---
   noStroke();
   fill(isOpen ? color(0, 38, 16) : color(22, 30, 24));
-  rect(rimX + rimW * 0.20, y + rimH * 0.24, rimW * 0.60, rimH * 0.40, 2);
+  rect(rimX + rimW * 0.2, y + rimH * 0.24, rimW * 0.6, rimH * 0.4, 2);
 }
 
 // ------------------------------------------------------------
@@ -366,10 +366,20 @@ function drawCoins() {
     // Source x position on the sprite sheet
     // We animate across the top row of Goombas so sy is always 0
     let sx = coin.frame * GOOMBA.frameWidth;
-    let dw = GOOMBA.frameWidth  * GOOMBA.scale;
+    let dw = GOOMBA.frameWidth * GOOMBA.scale;
     let dh = GOOMBA.frameHeight * GOOMBA.scale;
 
-    image(goombaSheet, coin.x, coin.y, dw, dh, sx, 0, GOOMBA.frameWidth, GOOMBA.frameHeight);
+    image(
+      goombaSheet,
+      coin.x,
+      coin.y,
+      dw,
+      dh,
+      sx,
+      0,
+      GOOMBA.frameWidth,
+      GOOMBA.frameHeight,
+    );
   }
 }
 
@@ -385,22 +395,26 @@ function handleInput() {
 
   player.isMoving = false;
 
-  if (keyIsDown(87)) { // W — up
+  if (keyIsDown(87)) {
+    // W — up
     player.y -= player.speed;
     player.direction = "up";
     player.isMoving = true;
   }
-  if (keyIsDown(83)) { // S — down
+  if (keyIsDown(83)) {
+    // S — down
     player.y += player.speed;
     player.direction = "down";
     player.isMoving = true;
   }
-  if (keyIsDown(65)) { // A — left
+  if (keyIsDown(65)) {
+    // A — left
     player.x -= player.speed;
     player.direction = "left";
     player.isMoving = true;
   }
-  if (keyIsDown(68)) { // D — right
+  if (keyIsDown(68)) {
+    // D — right
     player.x += player.speed;
     player.direction = "right";
     player.isMoving = true;
@@ -434,26 +448,32 @@ function resolveWallCollisions() {
     let row = floor(c.y / TILE_SIZE);
 
     // Skip if outside the maze array bounds
-    if (row < 0 || row >= MAZE.length || col < 0 || col >= MAZE[0].length) continue;
+    if (row < 0 || row >= MAZE.length || col < 0 || col >= MAZE[0].length)
+      continue;
 
     if (MAZE[row][col] === 1) {
       // Calculate how far the player is overlapping each side of the wall tile
-      let tileLeft   = col * TILE_SIZE;
-      let tileRight  = tileLeft + TILE_SIZE;
-      let tileTop    = row * TILE_SIZE;
+      let tileLeft = col * TILE_SIZE;
+      let tileRight = tileLeft + TILE_SIZE;
+      let tileTop = row * TILE_SIZE;
       let tileBottom = tileTop + TILE_SIZE;
 
-      let overlapLeft   = (player.x + player.hw) - tileLeft;
-      let overlapRight  = tileRight  - (player.x - player.hw);
-      let overlapTop    = (player.y + player.hh) - tileTop;
+      let overlapLeft = player.x + player.hw - tileLeft;
+      let overlapRight = tileRight - (player.x - player.hw);
+      let overlapTop = player.y + player.hh - tileTop;
       let overlapBottom = tileBottom - (player.y - player.hh);
 
       // Push the player out from the side with the smallest overlap
-      let minOverlap = min(overlapLeft, overlapRight, overlapTop, overlapBottom);
+      let minOverlap = min(
+        overlapLeft,
+        overlapRight,
+        overlapTop,
+        overlapBottom,
+      );
 
-      if      (minOverlap === overlapLeft)   player.x -= overlapLeft;
-      else if (minOverlap === overlapRight)  player.x += overlapRight;
-      else if (minOverlap === overlapTop)    player.y -= overlapTop;
+      if (minOverlap === overlapLeft) player.x -= overlapLeft;
+      else if (minOverlap === overlapRight) player.x += overlapRight;
+      else if (minOverlap === overlapTop) player.y -= overlapTop;
       else if (minOverlap === overlapBottom) player.y += overlapBottom;
     }
   }
@@ -521,7 +541,7 @@ function animateSprite() {
   } else {
     // Reset to standing frame when not moving
     player.currentFrame = 0;
-    player.frameTimer   = 0;
+    player.frameTimer = 0;
   }
 }
 
@@ -543,10 +563,10 @@ function animateSprite() {
 function drawCharacter() {
   // Source position on the sprite sheet
   let sx = player.currentFrame * SPRITE.frameWidth;
-  let sy = SPRITE.row          * SPRITE.frameHeight;
+  let sy = SPRITE.row * SPRITE.frameHeight;
 
   // Draw size (original frame size multiplied by scale)
-  let dw = SPRITE.frameWidth  * SPRITE.scale;
+  let dw = SPRITE.frameWidth * SPRITE.scale;
   let dh = SPRITE.frameHeight * SPRITE.scale;
 
   if (player.direction === "left") {
@@ -557,10 +577,30 @@ function drawCharacter() {
     push();
     translate(player.x, player.y);
     scale(-1, 1);
-    image(characterSheet, 0, SPRITE.drawOffsetY, dw, dh, sx, sy, SPRITE.frameWidth, SPRITE.frameHeight);
+    image(
+      characterSheet,
+      0,
+      SPRITE.drawOffsetY,
+      dw,
+      dh,
+      sx,
+      sy,
+      SPRITE.frameWidth,
+      SPRITE.frameHeight,
+    );
     pop();
   } else {
-    image(characterSheet, player.x, player.y + SPRITE.drawOffsetY, dw, dh, sx, sy, SPRITE.frameWidth, SPRITE.frameHeight);
+    image(
+      characterSheet,
+      player.x,
+      player.y + SPRITE.drawOffsetY,
+      dw,
+      dh,
+      sx,
+      sy,
+      SPRITE.frameWidth,
+      SPRITE.frameHeight,
+    );
   }
 }
 
@@ -588,11 +628,11 @@ function drawHUD() {
   textSize(13);
   let w2 = allCollected ? textWidth(line2) : 0;
 
-  let padX    = 12;
-  let panelX  = 8;
-  let panelY  = 8;
-  let panelW  = max(w1, w2) + padX * 2;
-  let panelH  = allCollected ? 56 : 34;
+  let padX = 12;
+  let panelX = 8;
+  let panelY = 8;
+  let panelW = max(w1, w2) + padX * 2;
+  let panelH = allCollected ? 56 : 34;
 
   // Panel background — semi-transparent dark green with a red border
   rectMode(CORNER);
@@ -600,13 +640,13 @@ function drawHUD() {
   fill(8, 24, 14, 210);
   rect(panelX, panelY, panelW, panelH, 6);
   noFill();
-  stroke(220, 40, 40);   // Mario red border
+  stroke(220, 40, 40); // Mario red border
   strokeWeight(2);
   rect(panelX, panelY, panelW, panelH, 6);
 
   // Goomba counter
   noStroke();
-  fill(255, 220, 60);    // coin-gold text
+  fill(255, 220, 60); // coin-gold text
   textSize(16);
   text(line1, panelX + padX, panelY + 18);
 
@@ -643,9 +683,9 @@ function drawInstructions() {
   textSize(13);
   textAlign(CENTER, CENTER);
   text(
-    "WASD to move   •   Collect all 3 Goombas   •   Reach the exit pipe to win",
+    "WASD to move   •   Collect all 3 Goombas to unlock the exit  •   Reach the exit pipe to win",
     MAZE_W / 2,
-    MAZE_H + FOOTER_H / 2
+    MAZE_H + FOOTER_H / 2,
   );
   textStyle(NORMAL);
 }
@@ -681,7 +721,11 @@ function drawWinScreen() {
   // Subtitle
   textSize(18);
   fill(255, 220, 60); // coin-gold
-  text("All " + coins.length + " Goombas collected", width / 2, height / 2 + 20);
+  text(
+    "All " + coins.length + " Goombas collected",
+    width / 2,
+    height / 2 + 20,
+  );
 
   textSize(13);
   fill(180, 230, 190);
