@@ -18,7 +18,7 @@ This example combines sprite sheet animation, collectible objects, and a tile-ba
 - **Corner-based wall collision** — checks all four corners of the player's collision box against the maze tile at each corner; pushes the player out from the direction with the smallest overlap
 - **Collision box tuned to the sprite** — `hw` and `hh` are sized to wrap Mario's body (including his lower half) so he can't sink into walls, while staying small enough to clear the corridors
 - **`dist()`** — returns the distance between two points; used for both Goomba collection and exit detection with a threshold based on `TILE_SIZE`
-- **Locked exit** — the exit tile changes colour and only activates when `coinsCollected === coins.length`; a single boolean condition controls both the visual and the logic
+- **Locked exit** — the exit is drawn as a Super Mario warp pipe (`drawPipe()`) that brightens from a dim, locked green to a vivid open green and only activates when `coinsCollected === coins.length`; a single boolean condition controls both the visual and the logic
 - **Self-sizing HUD panel** — `drawHUD()` measures its text with `textWidth()` and sizes the bordered panel to fit, so the frame always wraps the text
 - **Image-backed win screen** — `drawWinScreen()` fills the canvas with the Super Mario background art, dims it slightly for contrast, then draws the "LEVEL CLEAR!" message on top
 - **`updateCoins()` and `drawCoins()` separation** — update logic and drawing are kept in separate functions
@@ -29,7 +29,7 @@ To run the sketch locally, open `index.html` in Google Chrome using Live Server.
 
 **Controls:** WASD to move.
 
-Collect all 3 Goombas, then reach the bright green exit tile to win.
+Collect all 3 Goombas, then reach the bright green exit pipe to win.
 
 **Opening the Chrome Console**
 

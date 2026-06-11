@@ -231,13 +231,9 @@ function drawMaze() {
         // Wall — drawn as bricks
         drawBrickTile(x, y, TILE_SIZE);
       } else if (tile === 4) {
-        // Exit tile changes colour when all collectibles are gathered
-        if (coinsCollected === coins.length) {
-          fill(40, 220, 130); // bright green — exit is open
-        } else {
-          fill(50, 80, 70, 200); // dim green — exit is locked
-        }
-        rect(x, y, TILE_SIZE, TILE_SIZE);
+        // Exit is drawn as a Super Mario pipe — bright green and open
+        // once every collectible is gathered, dim while still locked.
+        drawPipe(x, y, TILE_SIZE, coinsCollected === coins.length);
       }
       // tiles 0, 2, 3 are floor — leave them transparent (stars show)
     }
@@ -278,6 +274,64 @@ function drawBrickTile(x, y, s) {
   }
 
   drawingContext.restore();
+}
+
+// ------------------------------------------------------------
+// drawPipe()
+// Draws the exit tile as a side-on Super Mario warp pipe: a wide
+// lip at the top sitting on a narrower body, with a highlight band
+// on the left and a shadow band on the right for that classic look.
+// When `isOpen` is false (collectibles still remaining) the pipe is
+// drawn in a dim, desaturated green to signal it is locked.
+// ------------------------------------------------------------
+function drawPipe(x, y, s, isOpen) {
+  // Palette — bright greens when open, muted greens when locked
+  const base  = isOpen ? color(0, 168, 64)   : color(70, 96, 80);
+  const light = isOpen ? color(120, 224, 120) : color(120, 148, 128);
+  const dark  = isOpen ? color(0, 104, 40)    : color(44, 62, 52);
+  const edge  = isOpen ? color(0, 56, 22)     : color(26, 38, 30);
+
+  rectMode(CORNER);
+
+  // Geometry
+  const rimH  = s * 0.30;             // height of the top lip
+  const rimX  = x + 2;                // lip is inset slightly from the tile
+  const rimW  = s - 4;
+  const bodyW = s * 0.70;             // body is narrower than the lip
+  const bodyX = x + (s - bodyW) / 2;
+  const bodyY = y + rimH;
+  const bodyH = s - rimH;
+
+  // --- Body ---
+  noStroke();
+  fill(base);
+  rect(bodyX, bodyY, bodyW, bodyH);
+  fill(light); // highlight band (left)
+  rect(bodyX + bodyW * 0.12, bodyY, bodyW * 0.16, bodyH);
+  fill(dark);  // shadow band (right)
+  rect(bodyX + bodyW * 0.70, bodyY, bodyW * 0.18, bodyH);
+  stroke(edge);
+  strokeWeight(2);
+  noFill();
+  rect(bodyX, bodyY, bodyW, bodyH);
+
+  // --- Top lip ---
+  noStroke();
+  fill(base);
+  rect(rimX, y, rimW, rimH, 3);
+  fill(light); // highlight band (left)
+  rect(rimX + rimW * 0.10, y + rimH * 0.20, rimW * 0.16, rimH * 0.62);
+  fill(dark);  // shadow band (right)
+  rect(rimX + rimW * 0.74, y + rimH * 0.20, rimW * 0.16, rimH * 0.62);
+  stroke(edge);
+  strokeWeight(2);
+  noFill();
+  rect(rimX, y, rimW, rimH, 3);
+
+  // --- Opening (dark hollow mouth inside the lip) ---
+  noStroke();
+  fill(isOpen ? color(0, 38, 16) : color(22, 30, 24));
+  rect(rimX + rimW * 0.20, y + rimH * 0.24, rimW * 0.60, rimH * 0.40, 2);
 }
 
 // ------------------------------------------------------------
@@ -525,7 +579,7 @@ function drawHUD() {
 
   // The two possible lines of text
   let line1 = "GOOMBAS  " + coinsCollected + " / " + coins.length;
-  let line2 = "Exit open! Reach the bright tile.";
+  let line2 = "Exit open! Reach the green pipe.";
 
   // Measure the lines so the panel can be sized to fit them.
   // Each line is measured at the size it will actually be drawn.
@@ -589,7 +643,7 @@ function drawInstructions() {
   textSize(13);
   textAlign(CENTER, CENTER);
   text(
-    "WASD to move   •   Collect all 3 Goombas   •   Reach the exit tile to win",
+    "WASD to move   •   Collect all 3 Goombas   •   Reach the exit pipe to win",
     MAZE_W / 2,
     MAZE_H + FOOTER_H / 2
   );
