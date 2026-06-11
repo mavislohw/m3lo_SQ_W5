@@ -1,27 +1,4 @@
-# Week 5 Example 3 — Maze with Mario and Goombas
-
-## What This Example Demonstrates
-
-> **Note for students:** This section is included in example files only to help you study. Do not include it in your Side Quest submissions.
-
-This example combines sprite sheet animation, collectible objects, and a tile-based maze into a complete mini-game with wall collision, item collection, and a locked exit. The character is Mario, the collectibles are Goombas, the walls are drawn as bricks, and the corridors open onto a starry-night background.
-
-- **2D array as a map** — the maze is stored as a grid of numbers; each number represents a tile type (floor, wall, collectible, exit); the array drives both the visual layout and the game logic
-- **Canvas sized to the maze plus a footer** — the canvas is `MAZE_W` wide and `MAZE_H + FOOTER_H` tall, so the maze fits exactly and a strip below it holds the on-screen instructions
-- **Image background showing through the maze** — a starfield image is drawn behind the grid and floor tiles are left unpainted, so the stars show through the corridors while only walls and the exit are drawn
-- **Procedural brick walls** — `drawBrickTile()` paints each wall tile as a running-bond brick pattern and uses `drawingContext.clip()` to keep the staggered bricks from spilling onto neighbouring floor tiles
-- **On-screen instructions footer** — `drawInstructions()` draws the controls and objective along the footer strip so the player always knows how to play
-- **Building objects from map data** — `setup()` scans the maze array to find collectible tiles and the start position; Goombas are created as objects at runtime rather than hardcoded
-- **`rectMode(CORNER)`** — switches `rect()` back to top-left positioning for drawing tiles; used here because tile coordinates come from the array index, not a centre point
-- **Single-row sprite sheet with horizontal flip** — Mario's frames all face right, so `drawCharacter()` reads one row of the sheet and mirrors the sprite with `scale(-1, 1)` when walking left
-- **Draw offset for an off-centre sprite** — Mario's art is bottom-aligned within each sheet cell, so `SPRITE.drawOffsetY` nudges him up a few pixels to sit centred on his collision box
-- **Corner-based wall collision** — checks all four corners of the player's collision box against the maze tile at each corner; pushes the player out from the direction with the smallest overlap
-- **Collision box tuned to the sprite** — `hw` and `hh` are sized to wrap Mario's body (including his lower half) so he can't sink into walls, while staying small enough to clear the corridors
-- **`dist()`** — returns the distance between two points; used for both Goomba collection and exit detection with a threshold based on `TILE_SIZE`
-- **Locked exit** — the exit is drawn as a Super Mario warp pipe (`drawPipe()`) that brightens from a dim, locked green to a vivid open green and only activates when `coinsCollected === coins.length`; a single boolean condition controls both the visual and the logic
-- **Self-sizing HUD panel** — `drawHUD()` measures its text with `textWidth()` and sizes the bordered panel to fit, so the frame always wraps the text
-- **Image-backed win screen** — `drawWinScreen()` fills the canvas with the Super Mario background art, dims it slightly for contrast, then draws the "LEVEL CLEAR!" message on top
-- **`updateCoins()` and `drawCoins()` separation** — update logic and drawing are kept in separate functions
+# Week 5 Sidequest — Super Mario Maze with Mario and Goombas
 
 ## Setup and Interaction Instructions
 
